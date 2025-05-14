@@ -6,7 +6,7 @@ json=/root/logs/report-$folder
 source /root/.bash_profile
 source $path/env
 
-version=$()
+version=$(journalctl -u $folder.service --since "1 hour ago" --no-hostname -o cat | grep "MOONVEIL L2 Muse Node" | awk '{print $6}')
 service=$(sudo systemctl status $folder --no-pager | grep "active (running)" | wc -l)
 errors=$(journalctl -u $folder.service --since "1 hour ago" --no-hostname -o cat | grep -c -E "rror|ERR")
 
@@ -25,8 +25,8 @@ cat >$json << EOF
        "owner":"$OWNER"
   },
   "fields": {
-        "chain":"?",
-        "network":"?",
+        "chain":"testnet",
+        "network":"testnet",
         "version":"$version",
         "status":"$status",
         "message":"$message",
