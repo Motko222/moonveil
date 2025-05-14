@@ -9,8 +9,9 @@ source $path/env
 version=$(journalctl -u $folder.service --since "1 hour ago" --no-hostname -o cat | grep "MOONVEIL L2 Muse Node" | awk '{print $6}')
 service=$(sudo systemctl status $folder --no-pager | grep "active (running)" | wc -l)
 errors=$(journalctl -u $folder.service --since "1 hour ago" --no-hostname -o cat | grep -c -E "rror|ERR")
+success=$(journalctl -u $folder.service --since "1 hour ago" --no-hostname -o cat | grep -c -E "successfully validated")
 
-status="ok" && message=""
+status="ok" && message="success=$success"
 [ $errors -gt 500 ] && status="warning" && message="errors=$errors";
 [ $service -ne 1 ] && status="error" && message="service not running";
 
@@ -33,7 +34,7 @@ cat >$json << EOF
         "service":$service,
         "errors":$errors,
         "url":"",
-        "balance":"$balance"
+        "success":"$success"
   }
 }
 EOF
