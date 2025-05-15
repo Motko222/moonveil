@@ -34,7 +34,7 @@ LimitNPROC=4096
 StandardOutput=journal
 StandardError=journal
 SyslogIdentifier=$folder
-WorkingDirectory=/root/$folder
+WorkingDirectory=/root/moonveil
 
 [Install]
 WantedBy=multi-user.target" > /etc/systemd/system/$folder.service
