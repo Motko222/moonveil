@@ -35,7 +35,8 @@ cat >$json << EOF
         "service":$service,
         "errors":$errors,
         "url":"",
-        "success":"$success"
+        "success":"$success",
+        "nft":"$nft"
   }
 }
 EOF
