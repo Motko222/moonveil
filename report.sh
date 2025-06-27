@@ -12,8 +12,8 @@ service=$(sudo systemctl status $folder --no-pager | grep "active (running)" | w
 errors=$(journalctl -u $folder.service --since "1 hour ago" --no-hostname -o cat | grep -c -E "rror|ERR")
 success=$(journalctl -u $folder.service --since "1 hour ago" --no-hostname -o cat | grep -c -E "successfully validated")
 
-status="ok" && message="success=$success"
-[ $errors -gt 500 ] && status="warning" && message="errors=$errors";
+status="ok" && message=""
+[ $errors -gt 500 ] && status="warning" && message="too many errors";
 [ $service -ne 1 ] && status="error" && message="service not running";
 
 cat >$json << EOF
@@ -34,9 +34,8 @@ cat >$json << EOF
         "message":"$message",
         "service":$service,
         "errors":$errors,
-        "url":"nft=$nft",
-        "success":"$success",
-        "nft":"$nft"
+        "m1":"bph=$success",
+        "m2":"nft=$nft"
   }
 }
 EOF
