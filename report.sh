@@ -7,7 +7,7 @@ source /root/.bash_profile
 source $path/env
 
 version=$(journalctl -u $folder.service --no-hostname -o cat | grep "MOONVEIL L2 Muse Node" | awk '{print $6}' | tail -1 )
-nft=$(journalctl -u $folder.service --no-hostname -o cat | grep "successfully delegated" | awk '{print $7}' | sed 's/#//')
+nft=$(journalctl -u $folder.service --no-hostname -o cat | grep "successfully delegated" | awk '{print $7}' | tail -1 | sed 's/#//')
 service=$(sudo systemctl status $folder --no-pager | grep "active (running)" | wc -l)
 errors=$(journalctl -u $folder.service --since "1 hour ago" --no-hostname -o cat | grep -c -E "rror|ERR")
 success=$(journalctl -u $folder.service --since "1 hour ago" --no-hostname -o cat | grep -c -E "successfully validated")
