@@ -34,7 +34,7 @@ cat >$json << EOF
         "message":"$message",
         "service":$service,
         "errors":$errors,
-        "m1":"bph=$success",
+        "m1":"bpd=$success",
         "m2":"nft=$nft"
   }
 }
