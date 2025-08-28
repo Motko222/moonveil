@@ -10,7 +10,7 @@ version=$(journalctl -u $folder.service --no-hostname -o cat | grep "MOONVEIL L2
 nft=$(journalctl -u $folder.service --no-hostname -o cat | grep "successfully delegated" | awk '{print $7}' | tail -1 | sed 's/#//')
 service=$(sudo systemctl status $folder --no-pager | grep "active (running)" | wc -l)
 errors=$(journalctl -u $folder.service --since "1 hour ago" --no-hostname -o cat | grep -c -E "rror|ERR")
-success=$(journalctl -u $folder.service --since "1 hour ago" --no-hostname -o cat | grep -c -E "successfully validated")
+success=$(journalctl -u $folder.service --since "1 day ago" --no-hostname -o cat | grep -c -E "successfully validated")
 
 status="ok" && message=""
 [ $errors -gt 500 ] && status="warning" && message="too many errors";
