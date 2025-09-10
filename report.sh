@@ -14,9 +14,11 @@ nft=$(journalctl -u $folder.service --no-hostname -o cat | grep "successfully de
 nft=$(cat /root/logs/$folder-nft)
 service=$(sudo systemctl status $folder --no-pager | grep "active (running)" | wc -l)
 errors=$(journalctl -u $folder.service --since "1 hour ago" --no-hostname -o cat | grep -c -E "rror|ERR")
-success=$(journalctl -u $folder.service --since "1 day ago" --no-hostname -o cat | grep -c -E "successfully validated")
+bpd=$(journalctl -u $folder.service --since "1 day ago" --no-hostname -o cat | grep -c -E "successfully validated")
+bph=$(journalctl -u $folder.service --since "1 hour ago" --no-hostname -o cat | grep -c -E "successfully validated")
 
-status="ok" && message=""
+status="ok" && message="" 
+[ $bph -eq 0 ] && systemctl restart $folder.service && status="warning" && message="restarted (no success)";
 [ $errors -gt 500 ] && status="warning" && message="too many errors";
 [ $service -ne 1 ] && status="error" && message="service not running";
 
@@ -38,7 +40,7 @@ cat >$json << EOF
         "message":"$message",
         "service":$service,
         "errors":$errors,
-        "m1":"bpd=$success",
+        "m1":"bpd=$bpd bph=$bph",
         "m2":"nft=$nft"
   }
 }
