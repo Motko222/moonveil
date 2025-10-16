@@ -17,9 +17,9 @@ errors=$(journalctl -u $folder.service --since "1 hour ago" --no-hostname -o cat
 bpd=$(journalctl -u $folder.service --since "1 day ago" --no-hostname -o cat | grep -c -E "successfully validated")
 bph=$(journalctl -u $folder.service --since "1 hour ago" --no-hostname -o cat | grep -c -E "successfully validated")
 
-status="ok" && message="" 
+status="ok" && message="validated $bph blocks last hour" 
 [ $bph -eq 0 ] && systemctl restart $folder.service && status="warning" && message="restarted (no blocks last hour)";
-[ $errors -gt 500 ] && status="warning" && message="too many errors";
+[ $errors -gt 500 ] && status="warning" && message="too many errors ($errors/h)";
 [ $service -ne 1 ] && status="error" && message="service not running";
 
 cat >$json << EOF
